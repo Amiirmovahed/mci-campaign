@@ -1,563 +1,556 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>محاسبه‌گر کمپین‌های تشویقی همراه اول | ویژه کارشناسان ترید مارکتینگ</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome CDN for Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Vazirmatn Persian Font -->
-    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#04246b">
+<title>محاسبه‌گر مشوق کمپین دفاتر | همراه اول</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #031a4d;
+    --blue: #0a4fc4;
+    --sky: #1fb6ff;
+    --cyan: #5fd8ff;
+    --amber: #ffc857;
+    --text: #ffffff;
+    --muted: rgba(255,255,255,.68);
+    --glass: rgba(255,255,255,.12);
+    --glass-strong: rgba(255,255,255,.18);
+    --stroke: rgba(255,255,255,.24);
+    --radius: 26px;
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    font-family: "Vazirmatn", "IRANSans", "Shabnam", Tahoma, "Segoe UI", system-ui, sans-serif;
+    color: var(--text);
+    background: var(--navy);
+    line-height: 1.7;
+    padding: max(18px, env(safe-area-inset-top)) 16px calc(128px + env(safe-area-inset-bottom));
+    min-height: 100vh;
+  }
 
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        mci: {
-                            blue: '#00a2e8',
-                            darkblue: '#003b64',
-                            orange: '#f26522',
-                            lightorange: '#ff6b00',
-                            dark: '#0a131d',
-                            glass: 'rgba(255, 255, 255, 0.07)',
-                            glassborder: 'rgba(255, 255, 255, 0.15)'
-                        }
-                    },
-                    fontFamily: {
-                        sans: ['Vazirmatn', 'sans-serif']
-                    }
-                }
-            }
-        }
-    </script>
+  /* پس‌زمینه */
+  .bg {
+    position: fixed; inset: 0; z-index: -1; overflow: hidden;
+    background: linear-gradient(165deg, #031a4d 0%, #05307f 55%, #0a58c9 100%);
+  }
+  .bg i {
+    position: absolute; border-radius: 50%; filter: blur(60px); opacity: .75;
+  }
+  .bg i:nth-child(1) { width: 300px; height: 300px; background: #1fb6ff; top: -90px; right: -80px; }
+  .bg i:nth-child(2) { width: 260px; height: 260px; background: #0a6cff; top: 38%; left: -110px; }
+  .bg i:nth-child(3) { width: 280px; height: 280px; background: #00cfff; bottom: -120px; right: -60px; opacity: .5; }
 
-    <style>
-        body {
-            font-family: 'Vazirmatn', sans-serif;
-            background: linear-gradient(135deg, #060d15 0%, #0a1826 50%, #001e36 100%);
-            color: #f1f5f9;
-            min-height: 100vh;
-            touch-action: manipulation;
-        }
+  .wrap { max-width: 520px; margin: 0 auto; display: grid; gap: 16px; }
 
-        /* Glassmorphism Styles */
-        .glass-card {
-            background: rgba(15, 28, 44, 0.65);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-        }
+  /* کارت شیشه‌ای */
+  .glass {
+    background: var(--glass);
+    border: 1px solid var(--stroke);
+    border-radius: var(--radius);
+    -webkit-backdrop-filter: blur(20px) saturate(150%);
+    backdrop-filter: blur(20px) saturate(150%);
+    box-shadow: 0 10px 34px rgba(1, 12, 48, .32), inset 0 1px 0 rgba(255,255,255,.28);
+    padding: 20px;
+  }
 
-        .glass-card-highlight {
-            background: linear-gradient(135deg, rgba(0, 162, 232, 0.15) 0%, rgba(242, 101, 34, 0.15) 100%);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(0, 162, 232, 0.3);
-            box-shadow: 0 10px 40px 0 rgba(0, 162, 232, 0.2);
-        }
+  header { padding: 6px 4px 2px; }
+  header h1 { margin: 0; font-size: 1.55rem; font-weight: 800; line-height: 1.4; }
+  header p { margin: 4px 0 0; color: var(--muted); font-size: .95rem; }
 
-        /* Custom Range Slider Styling */
-        input[type=range] {
-            -webkit-appearance: none;
-            width: 100%;
-            background: transparent;
-        }
+  /* کلید گرید */
+  .grade { display: flex; align-items: center; justify-content: space-between; gap: 14px; }
+  .grade h2 { margin: 0; font-size: 1.05rem; font-weight: 700; }
+  .grade p { margin: 2px 0 0; color: var(--muted); font-size: .85rem; }
+  .switch { position: relative; flex: none; width: 62px; height: 36px; }
+  .switch input { position: absolute; inset: 0; opacity: 0; margin: 0; width: 100%; height: 100%; cursor: pointer; z-index: 2; }
+  .switch .track {
+    position: absolute; inset: 0; border-radius: 99px;
+    background: rgba(255,255,255,.2); border: 1px solid var(--stroke);
+    transition: background .25s;
+  }
+  .switch .knob {
+    position: absolute; top: 3px; right: 3px; width: 28px; height: 28px; border-radius: 50%;
+    background: #fff; box-shadow: 0 3px 10px rgba(0,0,0,.3);
+    transition: transform .25s cubic-bezier(.3,.9,.3,1.2);
+  }
+  .switch input:checked ~ .track { background: linear-gradient(135deg, var(--sky), #2f7bff); }
+  .switch input:checked ~ .knob { transform: translateX(-28px); }
+  .switch input:focus-visible ~ .track { outline: 3px solid var(--cyan); outline-offset: 3px; }
 
-        input[type=range]:focus {
-            outline: none;
-        }
+  /* عنوان کارت */
+  .card-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+  .card-head h2 { margin: 0; font-size: 1.12rem; font-weight: 800; line-height: 1.5; }
+  .card-head p { margin: 2px 0 0; color: var(--muted); font-size: .85rem; }
+  .icon {
+    flex: none; width: 44px; height: 44px; border-radius: 15px; display: grid; place-items: center;
+    background: linear-gradient(140deg, rgba(95,216,255,.5), rgba(47,123,255,.4));
+    border: 1px solid var(--stroke);
+  }
+  .icon svg { width: 24px; height: 24px; stroke: #fff; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 
-        input[type=range]::-webkit-slider-runnable-track {
-            width: 100%;
-            height: 10px;
-            cursor: pointer;
-            background: rgba(255, 255, 255, 0.15);
-            border-radius: 999px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
+  /* نرخ‌ها */
+  .rates { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+  .chip {
+    font-size: .8rem; padding: 4px 12px; border-radius: 99px;
+    background: rgba(255,255,255,.12); border: 1px solid var(--stroke);
+    transition: background .25s, border-color .25s;
+  }
+  .chip b { font-weight: 700; }
+  .chip.hot { background: rgba(255,200,87,.18); border-color: rgba(255,200,87,.6); }
 
-        input[type=range]::-webkit-slider-thumb {
-            height: 26px;
-            width: 26px;
-            border-radius: 50%;
-            background: #f26522;
-            cursor: pointer;
-            -webkit-appearance: none;
-            margin-top: -8px;
-            box-shadow: 0 0 15px #f26522, 0 0 2px #fff;
-            transition: transform 0.1s ease, background-color 0.2s ease;
-        }
+  /* مقدار */
+  .count { display: flex; align-items: baseline; gap: 8px; margin-bottom: 4px; }
+  .count .n { font-size: 2.6rem; font-weight: 800; line-height: 1.1; min-width: 2ch; }
+  .count .u { font-size: 1rem; color: var(--muted); }
+  .count .sub { margin-inline-start: auto; font-size: .85rem; color: var(--cyan); }
 
-        input[type=range]:active::-webkit-slider-thumb {
-            transform: scale(1.2);
-            background: #ff6b00;
-        }
+  /* اسلایدر */
+  .ctrl { display: flex; align-items: center; gap: 10px; direction: rtl; margin: 10px 0 0; }
+  .step {
+    flex: none; width: 44px; height: 44px; border-radius: 50%; cursor: pointer;
+    font: 700 1.4rem/1 "Vazirmatn", sans-serif; color: #fff;
+    background: var(--glass-strong); border: 1px solid var(--stroke);
+    display: grid; place-items: center; padding: 0;
+    transition: transform .12s, background .2s;
+  }
+  .step:active { transform: scale(.92); background: rgba(255,255,255,.3); }
+  .step:focus-visible { outline: 3px solid var(--cyan); outline-offset: 2px; }
 
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #060d15;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #00a2e8;
-            border-radius: 3px;
-        }
+  input[type=range] {
+    -webkit-appearance: none; appearance: none; flex: 1; min-width: 0; height: 44px; background: transparent; margin: 0; cursor: pointer;
+    --p: 0%;
+  }
+  input[type=range]::-webkit-slider-runnable-track {
+    height: 10px; border-radius: 99px;
+    background: linear-gradient(to left, var(--sky) var(--p), rgba(255,255,255,.22) var(--p));
+  }
+  input[type=range]::-moz-range-track { height: 10px; border-radius: 99px; background: rgba(255,255,255,.22); }
+  input[type=range]::-moz-range-progress { height: 10px; border-radius: 99px; background: var(--sky); }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none; appearance: none; width: 30px; height: 30px; margin-top: -10px; border-radius: 50%;
+    background: #fff; border: 4px solid var(--sky); box-shadow: 0 4px 14px rgba(0,0,0,.35);
+  }
+  input[type=range]::-moz-range-thumb {
+    width: 22px; height: 22px; border-radius: 50%; background: #fff; border: 4px solid var(--sky); box-shadow: 0 4px 14px rgba(0,0,0,.35);
+  }
+  input[type=range]:focus-visible { outline: 3px solid var(--cyan); outline-offset: 2px; border-radius: 12px; }
 
-        @media print {
-            body {
-                background: white !important;
-                color: black !important;
-            }
-            .no-print {
-                display: none !important;
-            }
-            .glass-card, .glass-card-highlight {
-                background: #f8fafc !important;
-                color: black !important;
-                border: 1px solid #ccc !important;
-                box-shadow: none !important;
-            }
-            .text-gray-300, .text-gray-400, .text-slate-300 {
-                color: #333 !important;
-            }
-        }
-    </style>
+  .scale { position: relative; height: 22px; margin: 0 69px; font-size: .75rem; color: var(--muted); }
+  .scale span { position: absolute; top: 0; transform: translateX(50%); }
+
+  /* نتیجه */
+  .result {
+    margin-top: 16px; padding: 16px; border-radius: 20px;
+    background: linear-gradient(140deg, rgba(95,216,255,.28), rgba(10,79,196,.32));
+    border: 1px solid rgba(255,255,255,.3);
+  }
+  .result .lbl { font-size: .88rem; color: var(--muted); }
+  .result .amt { font-size: 1.9rem; font-weight: 800; line-height: 1.4; }
+  .result .amt small { font-size: .95rem; font-weight: 500; color: var(--muted); margin-inline-start: 4px; }
+
+  .rows { margin-top: 12px; display: grid; gap: 8px; }
+  .row { display: flex; justify-content: space-between; gap: 10px; font-size: .9rem; padding-top: 8px; border-top: 1px dashed rgba(255,255,255,.22); }
+  .row .f { display: block; color: var(--muted); font-size: .78rem; }
+  .row .v { font-weight: 700; white-space: nowrap; }
+  .row.off { opacity: .45; }
+  .row.plus .v { color: var(--amber); }
+
+  /* مودم */
+  .modems { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 4px 0 18px; }
+  .m {
+    text-align: center; padding: 10px 4px; border-radius: 16px; font-size: .78rem;
+    background: rgba(255,255,255,.08); border: 1px solid var(--stroke); color: var(--muted);
+    transition: all .3s;
+  }
+  .m b { display: block; font-size: 1.15rem; color: #fff; }
+  .m.on { background: linear-gradient(140deg, rgba(95,216,255,.55), rgba(47,123,255,.5)); border-color: #fff; color: #fff; box-shadow: 0 0 22px rgba(95,216,255,.45); }
+
+  .bar { position: relative; height: 12px; border-radius: 99px; background: rgba(255,255,255,.2); margin: 0 4px 30px; }
+  .bar .fill { position: absolute; top: 0; bottom: 0; right: 0; border-radius: 99px; background: linear-gradient(270deg, var(--sky), var(--cyan)); transition: width .3s; }
+  .bar .tick { position: absolute; top: 0; height: 12px; width: 2px; background: rgba(255,255,255,.7); }
+  .bar .tick span { position: absolute; top: 16px; right: 50%; transform: translateX(50%); font-size: .72rem; color: var(--muted); white-space: nowrap; }
+
+  .total-line { display: flex; justify-content: space-between; align-items: baseline; font-size: .92rem; color: var(--muted); }
+  .total-line b { color: #fff; font-size: 1.1rem; }
+  .modem-out { margin-top: 12px; }
+  .modem-out .big { font-size: 1.9rem; font-weight: 800; line-height: 1.4; }
+  .modem-out .hint { color: var(--cyan); font-size: .9rem; }
+
+  .notes { margin-top: 18px; }
+  .note {
+    padding: 12px 14px; border-radius: 16px; font-size: .88rem;
+    background: rgba(255,255,255,.1); border: 1px solid var(--stroke);
+    position: relative; overflow: hidden; padding-inline-start: 20px;
+  }
+  .note::before { content: ""; position: absolute; top: 0; bottom: 0; right: 0; width: 5px; background: var(--amber); }
+  .note + .note { margin-top: 22px; }
+
+  /* جمع مشوق */
+  .grp { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; margin-top: 16px; font-weight: 800; font-size: 1rem; }
+  .grp.sep { margin-top: 18px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,.22); }
+  .grp { font-size: .95rem; }
+  .grp span:first-child { min-width: 0; }
+  .grp .g { color: var(--cyan); white-space: nowrap; font-size: .9rem; }
+  .sum-total { margin-top: 18px; }
+  .sum-total .line { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+  .sum-total .line + .line { margin-top: 6px; padding-top: 8px; border-top: 1px dashed rgba(255,255,255,.28); }
+  .sum-total .big { font-size: 1.8rem; font-weight: 800; line-height: 1.4; }
+  .sum-total .big small { font-size: .9rem; font-weight: 500; color: var(--muted); margin-inline-start: 4px; }
+  .dock { cursor: pointer; }
+
+  /* نوار جمع کل */
+  .dock {
+    position: fixed; z-index: 10; left: 12px; right: 12px; bottom: max(12px, env(safe-area-inset-bottom));
+    max-width: 496px; margin: 0 auto; padding: 12px 18px;
+    display: flex; justify-content: space-between; align-items: center; gap: 12px;
+    border-radius: 24px; background: rgba(4, 22, 74, .55);
+    border: 1px solid var(--stroke);
+    -webkit-backdrop-filter: blur(22px) saturate(160%); backdrop-filter: blur(22px) saturate(160%);
+    box-shadow: 0 12px 40px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.25);
+  }
+  .dock .l { font-size: .78rem; color: var(--muted); line-height: 1.5; }
+  .dock .a { font-size: 1.3rem; font-weight: 800; line-height: 1.4; }
+  .dock .a small { font-size: .78rem; font-weight: 500; color: var(--muted); margin-inline-start: 3px; }
+  .dock .md { text-align: center; padding: 6px 14px; border-radius: 16px; background: rgba(95,216,255,.22); border: 1px solid rgba(255,255,255,.3); }
+  .dock .md b { display: block; font-size: 1.3rem; line-height: 1.3; }
+  .dock .md span { font-size: .72rem; color: var(--muted); }
+
+  @media (max-width: 360px) {
+    .count .n { font-size: 2.2rem; }
+    .result .amt { font-size: 1.6rem; }
+    .glass { padding: 16px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+  }
+</style>
 </head>
-<body class="p-3 sm:p-6 pb-20">
+<body>
+<div class="bg" aria-hidden="true"><i></i><i></i><i></i></div>
 
-    <!-- Header -->
-    <header class="max-w-xl mx-auto mb-6 text-center">
-        <div class="flex items-center justify-between glass-card p-4 rounded-2xl mb-4 border-b-2 border-mci-blue">
-            <div class="flex items-center gap-3">
-                <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-mci-blue to-cyan-300 flex items-center justify-center text-slate-950 font-black text-xl shadow-lg shadow-mci-blue/30">
-                    <i class="fa-solid font-bold fa-sim-card text-2xl text-mci-darkblue"></i>
-                </div>
-                <div class="text-right">
-                    <h1 class="text-lg font-bold text-white tracking-wide">همراه اول</h1>
-                    <p class="text-xs text-mci-blue font-medium">داشبورد اختصاصی ترید مارکتینگ</p>
-                </div>
-            </div>
-            <div class="bg-mci-orange/20 border border-mci-orange/40 text-mci-orange px-3 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 animate-pulse">
-                <span class="w-2 h-2 rounded-full bg-mci-orange inline-block"></span>
-                کمپین جاری
-            </div>
+<main class="wrap">
+
+  <header>
+    <h1>محاسبه‌گر مشوق کمپین دفاتر</h1>
+    <p>هر ۱۰ سیم‌کارت = ۱ باندل. اسلایدرها را جابه‌جا کنید تا مبلغ مشوق دفتر نمایش داده شود.</p>
+  </header>
+
+  <!-- گرید -->
+  <section class="glass grade">
+    <div>
+      <h2>دفتر گرید A یا <bdi dir="ltr">B+</bdi></h2>
+      <p>این دفاتر مشوق بیشتری دریافت می‌کنند</p>
+    </div>
+    <label class="switch">
+      <input type="checkbox" id="grade" role="switch" aria-label="دفتر گرید A یا B پلاس">
+      <span class="track"></span><span class="knob"></span>
+    </label>
+  </section>
+
+  <!-- کمپین اول: باندل -->
+  <section class="glass">
+    <div class="card-head">
+      <div>
+        <h2>مشوق فعال‌سازی باندل</h2>
+        <p>از باندل چهارم به بعد، مشوق هر باندل بیشتر می‌شود</p>
+      </div>
+      <div class="icon"><svg viewBox="0 0 24 24"><rect x="6" y="2.5" width="12" height="19" rx="3"/><path d="M10 6.5h4M10.5 18h3"/></svg></div>
+    </div>
+
+    <div class="rates">
+      <span class="chip">باندل ۱ تا ۳: <b id="r1">—</b></span>
+      <span class="chip hot">باندل ۴ به بعد: <b id="r2">—</b></span>
+    </div>
+
+    <div class="count">
+      <span class="n" id="n1">۰</span><span class="u">باندل</span>
+      <span class="sub" id="s1">۰ سیم‌کارت</span>
+    </div>
+    <div class="ctrl">
+      <button class="step" data-t="b" data-d="-1" aria-label="کم کردن یک باندل">−</button>
+      <input type="range" id="b" dir="rtl" min="0" max="100" step="1" value="0" aria-label="تعداد باندل">
+      <button class="step" data-t="b" data-d="1" aria-label="اضافه کردن یک باندل">+</button>
+    </div>
+    <div class="scale" aria-hidden="true"><span style="right:0">۰</span><span style="right:50%">۵۰</span><span style="right:100%">۱۰۰</span></div>
+
+    <div class="result">
+      <div class="lbl">مبلغ دریافتی دفتر</div>
+      <div class="amt"><span id="o1">۰</span><small>تومان</small></div>
+      <div class="rows">
+        <div class="row" id="row1a">
+          <div>باندل ۱ تا ۳<span class="f" id="f1a"></span></div>
+          <div class="v" id="v1a"></div>
         </div>
-        <h2 class="text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-200 to-mci-blue">
-            محاسبه‌گر پاداش و تشویقی دفاتر خدماتی
-        </h2>
-        <p class="text-xs text-slate-400 mt-1">ابزار ارائه‌ و پرزنت سریع و بی‌نقص طرح‌های انگیزشی به نمایندگی‌ها</p>
-    </header>
+        <div class="row plus" id="row1b">
+          <div>باندل ۴ به بعد<span class="f" id="f1b"></span></div>
+          <div class="v" id="v1b"></div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-    <!-- Main Container -->
-    <main class="max-w-xl mx-auto space-y-5">
+  <!-- کمپین دوم: مشتری جدید -->
+  <section class="glass">
+    <div class="card-head">
+      <div>
+        <h2>مشوق مشتری جدید</h2>
+        <p>مشترکانی که تا امروز همراه اول نداشته‌اند. هر ۱۰ مشترک جدید = ۱ باندل</p>
+      </div>
+      <div class="icon"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.6-3.6 3.2-5.5 6.5-5.5s5.9 1.9 6.5 5.5M18 8v6M15 11h6"/></svg></div>
+    </div>
 
-        <!-- Campaign 1: SIM Card Sales Bundle -->
-        <section class="glass-card rounded-2xl p-5 relative overflow-hidden">
-            <div class="absolute -left-10 -top-10 w-32 h-32 bg-mci-blue/10 rounded-full blur-2xl pointer-events-none"></div>
-            
-            <div class="flex items-center justify-between mb-4 border-b border-white/10 pb-3">
-                <div class="flex items-center gap-2.5">
-                    <span class="w-8 h-8 rounded-lg bg-mci-blue/20 text-mci-blue flex items-center justify-center font-bold text-sm">۱</span>
-                    <div>
-                        <h3 class="font-bold text-base text-white">کمپین فروش سیم‌کارت</h3>
-                        <p class="text-[11px] text-slate-400">هر ۱۰ عدد سیم‌کارت = ۱ باندل فروش</p>
-                    </div>
-                </div>
-                <span class="bg-blue-500/10 text-mci-blue text-xs font-bold px-2.5 py-1 rounded-lg border border-mci-blue/20">
-                    پایه + ویژه
-                </span>
-            </div>
+    <div class="rates">
+      <span class="chip hot">هر باندل: <b id="r3">—</b></span>
+    </div>
 
-            <!-- Slider Block -->
-            <div class="space-y-4">
-                <div class="flex justify-between items-center bg-slate-900/60 p-3 rounded-xl border border-white/5">
-                    <span class="text-xs text-slate-300 font-medium">تعداد باندل سیم‌کارت:</span>
-                    <div class="flex items-center gap-2">
-                        <button onclick="adjustSimBundle(-1)" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-mci-blue font-bold flex items-center justify-center active:scale-95 transition-all text-lg border border-white/10">-</button>
-                        <input type="number" id="simBundleInput" value="5" min="0" max="100" class="w-16 bg-slate-950 text-center text-mci-orange font-black text-lg py-1 rounded-lg border border-mci-blue/30 focus:outline-none focus:border-mci-orange">
-                        <button onclick="adjustSimBundle(1)" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-mci-blue font-bold flex items-center justify-center active:scale-95 transition-all text-lg border border-white/10">+</button>
-                    </div>
-                </div>
+    <div class="count">
+      <span class="n" id="n2">۰</span><span class="u">باندل</span>
+      <span class="sub" id="s2">۰ مشترک جدید</span>
+    </div>
+    <div class="ctrl">
+      <button class="step" data-t="nb" data-d="-1" aria-label="کم کردن یک باندل">−</button>
+      <input type="range" id="nb" dir="rtl" min="0" max="100" step="1" value="0" aria-label="تعداد باندل مشتری جدید">
+      <button class="step" data-t="nb" data-d="1" aria-label="اضافه کردن یک باندل">+</button>
+    </div>
+    <div class="scale" aria-hidden="true"><span style="right:0">۰</span><span style="right:50%">۵۰</span><span style="right:100%">۱۰۰</span></div>
 
-                <div class="pt-2">
-                    <input type="range" id="simBundleSlider" min="0" max="100" value="5" oninput="syncSimBundle(this.value)">
-                    <div class="flex justify-between text-[10px] text-slate-400 mt-1 px-1 font-mono">
-                        <span>۰ باندل</span>
-                        <span>۲۵ باندل</span>
-                        <span>۵۰ باندل</span>
-                        <span>۷۵ باندل</span>
-                        <span>۱۰۰ باندل</span>
-                    </div>
-                </div>
+    <div class="result">
+      <div class="lbl">مبلغ دریافتی دفتر</div>
+      <div class="amt"><span id="o2">۰</span><small>تومان</small></div>
+      <div class="rows">
+        <div class="row">
+          <div>مشتری جدید<span class="f" id="f2"></span></div>
+          <div class="v" id="v2"></div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-                <!-- Live Sim Breakdown -->
-                <div class="grid grid-cols-2 gap-2 text-xs pt-1">
-                    <div class="bg-slate-900/40 p-2.5 rounded-xl border border-white/5">
-                        <span class="text-slate-400 block text-[10px]">تعداد کل سیم‌کارت‌ها:</span>
-                        <span id="simTotalCount" class="text-mci-blue font-bold text-sm">۵۰ عدد</span>
-                    </div>
-                    <div class="bg-slate-900/40 p-2.5 rounded-xl border border-white/5">
-                        <span class="text-slate-400 block text-[10px]">وضعیت پاداش پله‌ای:</span>
-                        <span id="simStepStatus" class="text-emerald-400 font-bold text-xs">شامل نرخ ویژه (باندل ۴+)</span>
-                    </div>
-                </div>
+  <!-- مودم -->
+  <section class="glass">
+    <div class="card-head">
+      <div>
+        <h2>محاسبه مودم</h2>
+        <p>بر اساس جمع باندل‌های ماه</p>
+      </div>
+      <div class="icon"><svg viewBox="0 0 24 24"><rect x="3" y="13" width="18" height="7" rx="2.5"/><path d="M7 16.5h.01M11 16.5h.01M8 9.5a6 6 0 0 1 8 0M5.5 6.5a10 10 0 0 1 13 0"/></svg></div>
+    </div>
 
-                <!-- Reward Details -->
-                <div class="space-y-1.5 text-xs bg-slate-950/50 p-3 rounded-xl border border-white/5">
-                    <div class="flex justify-between text-slate-300">
-                        <span>باندل ۱ تا ۳ (۱۰۰ هزار تومان/باندل):</span>
-                        <span id="simBaseReward" class="font-bold">۳۰۰,۰۰۰ تومان</span>
-                    </div>
-                    <div class="flex justify-between text-slate-300">
-                        <span>باندل ۴ به بعد (۲۵۰ هزار تومان/باندل):</span>
-                        <span id="simBonusReward" class="font-bold text-mci-orange">۵۰۰,۰۰۰ تومان</span>
-                    </div>
-                    <div class="border-t border-white/10 pt-2 flex justify-between font-bold text-sm text-white">
-                        <span>جمع پاداش نقدی سیم‌کارت:</span>
-                        <span id="simTotalReward" class="text-emerald-400">۸۰۰,۰۰۰ تومان</span>
-                    </div>
-                </div>
-            </div>
-        </section>
+    <div class="modems">
+      <div class="m" id="m1"><b>۲۵</b>باندل<br>۱ مودم</div>
+      <div class="m" id="m2"><b>۴۰</b>باندل<br>۲ مودم</div>
+      <div class="m" id="m3"><b>۶۰</b>باندل<br>۳ مودم</div>
+    </div>
 
-        <!-- Campaign 2: New Subscribers -->
-        <section class="glass-card rounded-2xl p-5 relative overflow-hidden">
-            <div class="absolute -right-10 -bottom-10 w-32 h-32 bg-mci-orange/10 rounded-full blur-2xl pointer-events-none"></div>
+    <div class="bar" aria-hidden="true">
+      <div class="fill" id="fill"></div>
+      <div class="tick" style="right:41.66%"><span>۲۵</span></div>
+      <div class="tick" style="right:66.66%"><span>۴۰</span></div>
+      <div class="tick" style="right:calc(100% - 2px)"><span>۶۰</span></div>
+    </div>
 
-            <div class="flex items-center justify-between mb-4 border-b border-white/10 pb-3">
-                <div class="flex items-center gap-2.5">
-                    <span class="w-8 h-8 rounded-lg bg-mci-orange/20 text-mci-orange flex items-center justify-center font-bold text-sm">۲</span>
-                    <div>
-                        <h3 class="font-bold text-base text-white">کمپین مشترکین جدید</h3>
-                        <p class="text-[11px] text-slate-400">هر ۱۰ مشتری جدید (۱ باندل) = ۱,۰۰۰,۰۰۰ تومان</p>
-                    </div>
-                </div>
-                <span class="bg-orange-500/10 text-mci-orange text-xs font-bold px-2.5 py-1 rounded-lg border border-mci-orange/20">
-                    ویژه جذب
-                </span>
-            </div>
+    <div class="total-line"><span>جمع باندل‌های ماه</span><b id="tot">۰</b></div>
 
-            <!-- Slider Block -->
-            <div class="space-y-4">
-                <div class="flex justify-between items-center bg-slate-900/60 p-3 rounded-xl border border-white/5">
-                    <span class="text-xs text-slate-300 font-medium">باندل مشترک جدید (هر باندل ۱۰ نفر):</span>
-                    <div class="flex items-center gap-2">
-                        <button onclick="adjustNewSubBundle(-1)" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-mci-orange font-bold flex items-center justify-center active:scale-95 transition-all text-lg border border-white/10">-</button>
-                        <input type="number" id="newSubInput" value="2" min="0" max="100" class="w-16 bg-slate-950 text-center text-mci-orange font-black text-lg py-1 rounded-lg border border-mci-orange/30 focus:outline-none focus:border-mci-blue">
-                        <button onclick="adjustNewSubBundle(1)" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-mci-orange font-bold flex items-center justify-center active:scale-95 transition-all text-lg border border-white/10">+</button>
-                    </div>
-                </div>
+    <div class="result modem-out">
+      <div class="lbl">مودم دریافتی دفتر</div>
+      <div class="big"><span id="mo">۰</span> <small style="font-size:.95rem;font-weight:500;color:var(--muted)">مودم</small></div>
+      <div class="hint" id="hint"></div>
+    </div>
 
-                <div class="pt-2">
-                    <input type="range" id="newSubSlider" min="0" max="100" value="2" oninput="syncNewSubBundle(this.value)">
-                    <div class="flex justify-between text-[10px] text-slate-400 mt-1 px-1 font-mono">
-                        <span>۰ باندل</span>
-                        <span>۲۵ باندل</span>
-                        <span>۵۰ باندل</span>
-                        <span>۷۵ باندل</span>
-                        <span>۱۰۰ باندل</span>
-                    </div>
-                </div>
+    <div class="notes">
+      <div class="note">این مودم، مشوق کاربر دفتر می‌باشد.</div>
+      <div class="note">تمام فعال‌سازی‌های سیم‌کارت باید از طریق یک ماژول انجام شوند تا در محاسبه مشوق مودم حساب شوند.</div>
+    </div>
+  </section>
 
-                <!-- New Sub Details -->
-                <div class="bg-slate-950/50 p-3 rounded-xl border border-white/5 space-y-2">
-                    <div class="flex justify-between text-xs text-slate-300">
-                        <span>تعداد کل مشترکین جدید ثبت شده:</span>
-                        <span id="newSubTotalCount" class="font-bold text-mci-blue">۲۰ نفر</span>
-                    </div>
-                    <div class="flex justify-between font-bold text-sm text-white border-t border-white/10 pt-2">
-                        <span>پاداش نقدی مشترکین جدید:</span>
-                        <span id="newSubTotalReward" class="text-emerald-400">۲,۰۰۰,۰۰۰ تومان</span>
-                    </div>
-                </div>
-            </div>
-        </section>
+  <!-- جمع مشوق -->
+  <section class="glass" id="summary">
+    <div class="card-head">
+      <div>
+        <h2>جمع مشوق دفتر</h2>
+        <p>مبلغ هر بخش و جمع نهایی</p>
+      </div>
+      <div class="icon"><svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="3"/><path d="M8 8h8M8 12h3M13 12h3M8 16h3M13 16h3"/></svg></div>
+    </div>
 
-        <!-- Campaign 3: Monthly Performance Incentives (Modems) -->
-        <section class="glass-card rounded-2xl p-5 relative overflow-hidden border-t-2 border-amber-500/50">
-            <div class="flex items-center justify-between mb-4 border-b border-white/10 pb-3">
-                <div class="flex items-center gap-2.5">
-                    <div class="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center text-sm font-bold">
-                        <i class="fa-solid fa-wifi"></i>
-                    </div>
-                    <div>
-                        <h3 class="font-bold text-base text-white">پاداش غیرنقدی عملکرد (مودم)</h3>
-                        <p class="text-[11px] text-slate-400">بر اساس مجموع باندل‌های سیم‌کارت ماهانه</p>
-                    </div>
-                </div>
-                <span id="modemCountBadge" class="bg-amber-500/20 text-amber-300 font-bold text-xs px-2.5 py-1 rounded-lg border border-amber-500/30">
-                    ۰ مودم تعلق گرفته
-                </span>
-            </div>
+    <div class="grp"><span>مشوق فعال‌سازی باندل</span><span class="g" id="sa">۰</span></div>
+    <div class="rows">
+      <div class="row" id="srowA1"><div>باندل ۱ تا ۳<span class="f" id="sfA1"></span></div><div class="v" id="svA1"></div></div>
+      <div class="row plus" id="srowA2"><div>باندل ۴ به بعد<span class="f" id="sfA2"></span></div><div class="v" id="svA2"></div></div>
+    </div>
 
-            <!-- Modem Target Tracker -->
-            <div class="space-y-4">
-                <div class="relative pt-2">
-                    <div class="flex justify-between text-xs font-bold text-slate-300 mb-2">
-                        <span>پیشرفت وصول هدف:</span>
-                        <span id="modemProgressText" class="text-mci-blue">۵ از ۶۰ باندل</span>
-                    </div>
-                    
-                    <!-- Custom Progress Bar -->
-                    <div class="w-full bg-slate-900 rounded-full h-3.5 p-0.5 border border-white/10 relative overflow-hidden">
-                        <div id="modemProgressBar" class="bg-gradient-to-r from-mci-blue via-teal-400 to-amber-400 h-full rounded-full transition-all duration-500" style="width: 8.33%;"></div>
-                    </div>
+    <div class="grp sep"><span>مشوق مشتری جدید</span><span class="g" id="sb">۰</span></div>
+    <div class="rows">
+      <div class="row" id="srowB"><div>باندل مشتری جدید<span class="f" id="sfB"></span></div><div class="v" id="svB"></div></div>
+    </div>
 
-                    <!-- Milestones Indicators -->
-                    <div class="grid grid-cols-3 gap-1 mt-3 text-center">
-                        <div id="milestone25" class="bg-slate-900/60 p-2 rounded-xl border border-white/5 transition-all">
-                            <span class="block text-[10px] text-slate-400">هدف ۲۵ باندل</span>
-                            <span class="text-xs font-bold text-amber-400">۱ مودم</span>
-                        </div>
-                        <div id="milestone40" class="bg-slate-900/60 p-2 rounded-xl border border-white/5 transition-all">
-                            <span class="block text-[10px] text-slate-400">هدف ۴۰ باندل</span>
-                            <span class="text-xs font-bold text-amber-400">۲ مودم</span>
-                        </div>
-                        <div id="milestone60" class="bg-slate-900/60 p-2 rounded-xl border border-white/5 transition-all">
-                            <span class="block text-[10px] text-slate-400">هدف ۶۰ باندل</span>
-                            <span class="text-xs font-bold text-amber-400">۳ مودم (سقف)</span>
-                        </div>
-                    </div>
-                </div>
+    <div class="result sum-total">
+      <div class="line"><span class="lbl">جمع کل مشوق نقدی</span></div>
+      <div class="big"><span id="stotal">۰</span><small>تومان</small></div>
+      <div class="line"><span class="lbl">مودم دریافتی</span><b id="smodem">۰ مودم</b></div>
+    </div>
+  </section>
 
-                <div id="nextTargetAlert" class="bg-amber-500/10 border border-amber-500/20 rounded-xl p-2.5 text-xs text-amber-200 text-center flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-circle-info text-amber-400"></i>
-                    <span id="nextTargetText">۲۰ باندل دیگر تا دریافت ۱ عدد مودم همراه اول</span>
-                </div>
-            </div>
-        </section>
+</main>
 
-        <!-- Grand Total Summary Card -->
-        <section class="glass-card-highlight rounded-2xl p-5 border-2 border-mci-blue/40 relative">
-            <div class="text-center pb-3 border-b border-white/10 mb-4">
-                <h3 class="text-lg font-black text-white flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-calculator text-mci-orange"></i>
-                    جمع‌بندی کل دریافتی دفتر پیشخوان
-                </h3>
-                <p class="text-xs text-slate-300 mt-0.5">خلاصه صورت‌حساب پرداختی ماهانه کمپین</p>
-            </div>
+<!-- جمع کل -->
+<div class="dock" role="status">
+  <div>
+    <div class="l">جمع مشوق نقدی دفتر</div>
+    <div class="a"><span id="grand">۰</span><small>تومان</small></div>
+  </div>
+  <div class="md"><b id="dm">۰</b><span>مودم</span></div>
+</div>
 
-            <div class="space-y-3">
-                <div class="flex justify-between items-center text-sm">
-                    <span class="text-slate-300">پاداش نقدی سیم‌کارت‌ها:</span>
-                    <span id="summarySimCash" class="font-bold text-white">۸۰۰,۰۰۰ تومان</span>
-                </div>
-                <div class="flex justify-between items-center text-sm">
-                    <span class="text-slate-300">پاداش نقدی مشترکین جدید:</span>
-                    <span id="summaryNewSubCash" class="font-bold text-white">۲,۰۰۰,۰۰۰ تومان</span>
-                </div>
-                <div class="flex justify-between items-center text-sm">
-                    <span class="text-slate-300">هدایای غیرنقدی (مودم):</span>
-                    <span id="summaryModems" class="font-bold text-amber-300">۰ عدد مودم</span>
-                </div>
+<script>
+(function () {
+  // ---------- تنظیمات کمپین ----------
+  var RATES = {
+    normal: { first: 100000, later: 250000, newUser: 1000000 },
+    top:    { first: 120000, later: 270000, newUser: 1200000 }   // گرید A و B+
+  };
+  var FIRST_TIER_BUNDLES = 3;                       // سه باندل اول
+  var MODEM_TIERS = [[60, 3], [40, 2], [25, 1]];    // [حداقل باندل، تعداد مودم]
+  var MODEM_MAX_SCALE = 60;
+  // جمع باندل‌های مودم = باندل فعال‌سازی + باندل مشتری جدید
+  var MODEM_COUNTS_BOTH = true;
 
-                <div class="bg-slate-950/80 p-4 rounded-xl border border-mci-blue/30 mt-3 text-center space-y-1">
-                    <span class="text-xs text-mci-blue font-bold block">مجموع کل پاداش نقدی قابل پرداخت:</span>
-                    <div id="grandTotalToman" class="text-2xl font-black text-emerald-400 tracking-tight">
-                        ۲,۸۰۰,۰۰۰ <span class="text-sm font-normal text-slate-300">تومان</span>
-                    </div>
-                    <div id="grandTotalRial" class="text-xs text-slate-400 font-mono pt-1 border-t border-white/10 mt-1">
-                        معادل ۲۸,۰۰۰,۰۰۰ ریال
-                    </div>
-                </div>
-            </div>
+  // ---------- ابزارها ----------
+  var fmt = function (n) { return Number(n).toLocaleString('fa-IR').replace(/\u066C/g, ','); };
+  var $ = function (id) { return document.getElementById(id); };
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-            <!-- Action Buttons -->
-            <div class="grid grid-cols-2 gap-3 mt-5 no-print">
-                <button onclick="resetCalculator()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold py-3 px-4 rounded-xl transition-all border border-white/10 flex items-center justify-center gap-2 active:scale-95">
-                    <i class="fa-solid fa-rotate-right"></i>
-                    بازنشانی مقادیر
-                </button>
-                <button onclick="shareSummary()" class="bg-gradient-to-r from-mci-blue to-mci-darkblue hover:opacity-90 text-white text-xs font-bold py-3 px-4 rounded-xl transition-all shadow-lg shadow-mci-blue/20 flex items-center justify-center gap-2 active:scale-95">
-                    <i class="fa-solid fa-share-nodes"></i>
-                    اشتراک / چاپ صورت‌حساب
-                </button>
-            </div>
-        </section>
+  function tween(el, to) {
+    var from = el._v;
+    el._v = to;
+    if (from === undefined || from === to || reduce) { el.textContent = fmt(to); return; }
+    cancelAnimationFrame(el._raf);
+    var t0 = performance.now(), d = 240;
+    (function step(t) {
+      var k = Math.min((t - t0) / d, 1), e = 1 - Math.pow(1 - k, 3);
+      el.textContent = fmt(Math.round(from + (to - from) * e));
+      if (k < 1) el._raf = requestAnimationFrame(step);
+    })(t0);
+  }
 
-    </main>
+  function fill(range) {
+    var p = (range.value - range.min) / (range.max - range.min) * 100;
+    range.style.setProperty('--p', p + '%');
+  }
 
-    <!-- Footer -->
-    <footer class="max-w-xl mx-auto text-center mt-8 text-slate-500 text-xs space-y-1 no-print">
-        <p>طراحی شده ویژه کارشناسان ترید مارکتینگ همراه اول</p>
-        <p class="text-[10px] text-slate-600">نسخه ۱.۳ | اصلاح محاسبات ۳ مودم | نسخه وب‌اپلیکیشن موبایل</p>
-    </footer>
+  // ---------- محاسبه و نمایش ----------
+  function update() {
+    var top = $('grade').checked;
+    var r = top ? RATES.top : RATES.normal;
+    var b = +$('b').value, nb = +$('nb').value;
+    fill($('b')); fill($('nb'));
 
-    <script>
-        // Formatter Helper
-        function formatNumber(num) {
-            return new Intl.NumberFormat('fa-IR').format(num);
-        }
+    // نرخ‌ها
+    $('r1').textContent = fmt(r.first) + ' تومان';
+    $('r2').textContent = fmt(r.later) + ' تومان';
+    $('r3').textContent = fmt(r.newUser) + ' تومان';
 
-        // Sim Bundle Control Logic
-        function adjustSimBundle(delta) {
-            const input = document.getElementById('simBundleInput');
-            let current = parseInt(input.value) || 0;
-            current = Math.min(100, Math.max(0, current + delta));
-            input.value = current;
-            syncSimBundle(current);
-        }
+    // کمپین اول
+    var firstCnt = Math.min(b, FIRST_TIER_BUNDLES);
+    var laterCnt = Math.max(b - FIRST_TIER_BUNDLES, 0);
+    var sumFirst = firstCnt * r.first, sumLater = laterCnt * r.later;
+    var income1 = sumFirst + sumLater;
 
-        function syncSimBundle(val) {
-            val = Math.min(100, Math.max(0, parseInt(val) || 0));
-            document.getElementById('simBundleInput').value = val;
-            document.getElementById('simBundleSlider').value = val;
-            calculateAll();
-        }
+    $('n1').textContent = fmt(b);
+    $('s1').textContent = fmt(b * 10) + ' سیم‌کارت';
+    tween($('o1'), income1);
+    $('f1a').textContent = fmt(firstCnt) + ' × ' + fmt(r.first);
+    $('v1a').textContent = fmt(sumFirst) + ' تومان';
+    $('f1b').textContent = fmt(laterCnt) + ' × ' + fmt(r.later);
+    $('v1b').textContent = fmt(sumLater) + ' تومان';
+    $('row1a').classList.toggle('off', firstCnt === 0);
+    $('row1b').classList.toggle('off', laterCnt === 0);
 
-        document.getElementById('simBundleInput').addEventListener('input', function() {
-            syncSimBundle(this.value);
-        });
+    // کمپین دوم
+    var income2 = nb * r.newUser;
+    $('n2').textContent = fmt(nb);
+    $('s2').textContent = fmt(nb * 10) + ' مشترک جدید';
+    tween($('o2'), income2);
+    $('f2').textContent = fmt(nb) + ' × ' + fmt(r.newUser);
+    $('v2').textContent = fmt(income2) + ' تومان';
 
-        // New Sub Bundle Control Logic
-        function adjustNewSubBundle(delta) {
-            const input = document.getElementById('newSubInput');
-            let current = parseInt(input.value) || 0;
-            current = Math.min(100, Math.max(0, current + delta));
-            input.value = current;
-            syncNewSubBundle(current);
-        }
+    // مودم
+    var total = MODEM_COUNTS_BOTH ? b + nb : b;
+    var modems = 0;
+    for (var i = 0; i < MODEM_TIERS.length; i++) {
+      if (total >= MODEM_TIERS[i][0]) { modems = MODEM_TIERS[i][1]; break; }
+    }
+    $('tot').textContent = fmt(total);
+    $('mo').textContent = fmt(modems);
+    $('m1').classList.toggle('on', modems >= 1);
+    $('m2').classList.toggle('on', modems >= 2);
+    $('m3').classList.toggle('on', modems >= 3);
+    $('fill').style.width = Math.min(total / MODEM_MAX_SCALE, 1) * 100 + '%';
 
-        function syncNewSubBundle(val) {
-            val = Math.min(100, Math.max(0, parseInt(val) || 0));
-            document.getElementById('newSubInput').value = val;
-            document.getElementById('newSubSlider').value = val;
-            calculateAll();
-        }
+    var hint;
+    if (modems >= 3) {
+      hint = 'به بالاترین سطح مودم رسیده است.';
+    } else {
+      var next = modems === 0 ? 25 : modems === 1 ? 40 : 60;
+      hint = fmt(next - total) + ' باندل دیگر تا مودم ' + (modems === 0 ? 'اول' : modems === 1 ? 'دوم' : 'سوم') + ' باقی مانده است.';
+    }
+    $('hint').textContent = hint;
 
-        document.getElementById('newSubInput').addEventListener('input', function() {
-            syncNewSubBundle(this.value);
-        });
+    // جمع کل
+    tween($('grand'), income1 + income2);
+    $('dm').textContent = fmt(modems);
 
-        // Main Calculation Engine
-        function calculateAll() {
-            // 1. Sim Bundle Calculations
-            const simBundles = parseInt(document.getElementById('simBundleInput').value) || 0;
-            const simTotalCount = simBundles * 10;
-            
-            let baseBundles = Math.min(simBundles, 3);
-            let bonusBundles = Math.max(0, simBundles - 3);
+    // کارت جمع مشوق
+    $('sa').textContent = fmt(income1) + ' تومان';
+    $('sfA1').textContent = fmt(firstCnt) + ' × ' + fmt(r.first);
+    $('svA1').textContent = fmt(sumFirst) + ' تومان';
+    $('sfA2').textContent = fmt(laterCnt) + ' × ' + fmt(r.later);
+    $('svA2').textContent = fmt(sumLater) + ' تومان';
+    $('srowA1').classList.toggle('off', firstCnt === 0);
+    $('srowA2').classList.toggle('off', laterCnt === 0);
+    $('sb').textContent = fmt(income2) + ' تومان';
+    $('sfB').textContent = fmt(nb) + ' × ' + fmt(r.newUser);
+    $('svB').textContent = fmt(income2) + ' تومان';
+    $('srowB').classList.toggle('off', nb === 0);
+    tween($('stotal'), income1 + income2);
+    $('smodem').textContent = fmt(modems) + ' مودم';
+  }
 
-            let simBaseCash = baseBundles * 100000; // 100,000 Toman for 1-3
-            let simBonusCash = bonusBundles * 250000; // 250,000 Toman for 4+
-            let simTotalCash = simBaseCash + simBonusCash;
+  // ---------- رویدادها ----------
+  $('b').addEventListener('input', update);
+  $('nb').addEventListener('input', update);
+  $('grade').addEventListener('change', update);
 
-            // Update SIM UI
-            document.getElementById('simTotalCount').innerText = `${formatNumber(simTotalCount)} عدد`;
-            document.getElementById('simBaseReward').innerText = `${formatNumber(simBaseCash)} تومان`;
-            document.getElementById('simBonusReward').innerText = `${formatNumber(simBonusCash)} تومان`;
-            document.getElementById('simTotalReward').innerText = `${formatNumber(simTotalCash)} تومان`;
+  var holdTimer, holdInt;
+  function bump(btn) {
+    var el = $(btn.dataset.t), d = +btn.dataset.d;
+    el.value = Math.min(+el.max, Math.max(+el.min, +el.value + d));
+    update();
+  }
+  document.querySelectorAll('.step').forEach(function (btn) {
+    btn.addEventListener('click', function (e) { if (e.detail === 0) bump(btn); });
+    btn.addEventListener('pointerdown', function () {
+      bump(btn);
+      holdTimer = setTimeout(function () { holdInt = setInterval(function () { bump(btn); }, 70); }, 380);
+    });
+    ['pointerup', 'pointerleave', 'pointercancel'].forEach(function (ev) {
+      btn.addEventListener(ev, function () { clearTimeout(holdTimer); clearInterval(holdInt); });
+    });
+    btn.addEventListener('contextmenu', function (e) { e.preventDefault(); });
+  });
 
-            const stepStatusEl = document.getElementById('simStepStatus');
-            if (simBundles === 0) {
-                stepStatusEl.innerText = 'بدون ثبت باندل';
-                stepStatusEl.className = 'text-slate-400 font-bold text-xs';
-            } else if (simBundles <= 3) {
-                stepStatusEl.innerText = 'نرخ پایه (باندل ۱ تا ۳)';
-                stepStatusEl.className = 'text-mci-blue font-bold text-xs';
-            } else {
-                stepStatusEl.innerText = 'شامل نرخ ویژه (باندل ۴+)';
-                stepStatusEl.className = 'text-emerald-400 font-bold text-xs';
-            }
+  document.querySelector('.dock').addEventListener('click', function () {
+    $('summary').scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' });
+  });
 
-            // 2. New Subscriber Calculations
-            const newSubBundles = parseInt(document.getElementById('newSubInput').value) || 0;
-            const newSubTotalCount = newSubBundles * 10;
-            const newSubCash = newSubBundles * 1000000; // 1,000,000 Toman per bundle (10 users)
-
-            // Update New Sub UI
-            document.getElementById('newSubTotalCount').innerText = `${formatNumber(newSubTotalCount)} نفر`;
-            document.getElementById('newSubTotalReward').innerText = `${formatNumber(newSubCash)} تومان`;
-
-            // 3. Modem Non-Cash Incentive Logic (Corrected: 25 -> 1 modem, 40 -> 2 modems, 60 -> 3 modems)
-            let modemsEarned = 0;
-            if (simBundles >= 60) {
-                modemsEarned = 3;
-            } else if (simBundles >= 40) {
-                modemsEarned = 2;
-            } else if (simBundles >= 25) {
-                modemsEarned = 1;
-            }
-
-            // Modem Progress Bar Logic (Maxed out at 60 bundles)
-            let progressPercent = Math.min(100, (simBundles / 60) * 100);
-            document.getElementById('modemProgressBar').style.width = `${progressPercent}%`;
-            document.getElementById('modemProgressText').innerText = `${formatNumber(simBundles)} از ۶۰ باندل`;
-
-            // Modem Badge
-            document.getElementById('modemCountBadge').innerText = `${formatNumber(modemsEarned)} عدد مودم تعلق گرفته`;
-
-            // Milestone Card Highlight Effects
-            const m25 = document.getElementById('milestone25');
-            const m40 = document.getElementById('milestone40');
-            const m60 = document.getElementById('milestone60');
-
-            m25.className = simBundles >= 25 ? "bg-amber-500/20 p-2 rounded-xl border border-amber-500/50 shadow-sm shadow-amber-500/20 transition-all" : "bg-slate-900/60 p-2 rounded-xl border border-white/5 transition-all opacity-60";
-            m40.className = simBundles >= 40 ? "bg-amber-500/20 p-2 rounded-xl border border-amber-500/50 shadow-sm shadow-amber-500/20 transition-all" : "bg-slate-900/60 p-2 rounded-xl border border-white/5 transition-all opacity-60";
-            m60.className = simBundles >= 60 ? "bg-amber-500/20 p-2 rounded-xl border border-amber-500/50 shadow-sm shadow-amber-500/20 transition-all" : "bg-slate-900/60 p-2 rounded-xl border border-white/5 transition-all opacity-60";
-
-            // Next Target Alert Message
-            const nextTargetEl = document.getElementById('nextTargetText');
-            if (simBundles < 25) {
-                nextTargetEl.innerText = `${formatNumber(25 - simBundles)} باندل دیگر تا دریافت ۱ عدد مودم همراه اول`;
-            } else if (simBundles < 40) {
-                nextTargetEl.innerText = `${formatNumber(40 - simBundles)} باندل دیگر تا دریافت ۲‌امین مودم همراه اول`;
-            } else if (simBundles < 60) {
-                nextTargetEl.innerText = `${formatNumber(60 - simBundles)} باندل دیگر تا دریافت ۳‌امین مودم (سقف هدایا)`;
-            } else {
-                nextTargetEl.innerText = `عالی است! دفتر به حداکثر پاداش غیرنقدی (۳ عدد مودم) دست یافته است.`;
-            }
-
-            // 4. Grand Total Summary Calculations
-            const grandTotalToman = simTotalCash + newSubCash;
-            const grandTotalRial = grandTotalToman * 10;
-
-            document.getElementById('summarySimCash').innerText = `${formatNumber(simTotalCash)} تومان`;
-            document.getElementById('summaryNewSubCash').innerText = `${formatNumber(newSubCash)} تومان`;
-            document.getElementById('summaryModems').innerText = `${formatNumber(modemsEarned)} عدد مودم`;
-
-            document.getElementById('grandTotalToman').innerHTML = `${formatNumber(grandTotalToman)} <span class="text-sm font-normal text-slate-300">تومان</span>`;
-            document.getElementById('grandTotalRial').innerText = `معادل ${formatNumber(grandTotalRial)} ریال`;
-        }
-
-        // Reset All Inputs
-        function resetCalculator() {
-            document.getElementById('simBundleInput').value = 0;
-            document.getElementById('simBundleSlider').value = 0;
-            document.getElementById('newSubInput').value = 0;
-            document.getElementById('newSubSlider').value = 0;
-            calculateAll();
-        }
-
-        // Share or Print Summary
-        function shareSummary() {
-            if (navigator.share) {
-                const simB = document.getElementById('simBundleInput').value;
-                const newSubB = document.getElementById('newSubInput').value;
-                const totalToman = document.getElementById('grandTotalToman').innerText.replace(/\s+/g, ' ');
-
-                navigator.share({
-                    title: 'برآورد پاداش کمپین همراه اول',
-                    text: `صورت‌حساب برآورد پاداش دفتر پیشخوان:\n- تعداد باندل سیم‌کارت: ${simB}\n- تعداد باندل مشترک جدید: ${newSubB}\n- مجموع دریافتی: ${totalToman}`,
-                    url: window.location.href,
-                }).catch(() => {
-                    window.print();
-                });
-            } else {
-                window.print();
-            }
-        }
-
-        // Initial Engine Run on Load
-        window.onload = function() {
-            calculateAll();
-        }
-    </script>
+  update();
+})();
+</script>
 </body>
 </html>
