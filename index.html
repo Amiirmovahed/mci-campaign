@@ -102,6 +102,7 @@
     transition: background .25s, border-color .25s;
   }
   .chip b { font-weight: 700; }
+  .chip[hidden] { display: none; }
   .chip.hot { background: rgba(255,200,87,.18); border-color: rgba(255,200,87,.6); }
 
   /* مقدار */
@@ -255,7 +256,7 @@
   <section class="glass grade">
     <div>
       <h2>دفتر گرید A یا <bdi dir="ltr">B+</bdi></h2>
-      <p>مشوق کمپین انارستان برای این دفاتر ۲۰٪ بیشتر است</p>
+      <p>مشوق نقدی این دفاتر ۲۰٪ بیشتر است</p>
     </div>
     <label class="switch">
       <input type="checkbox" id="grade" role="switch" aria-label="دفتر گرید A یا B پلاس">
@@ -277,6 +278,7 @@
       <span class="chip">تا ۵ باندل: <b id="r1">—</b></span>
       <span class="chip hot">از باندل ۶ به بعد: <b id="r2">—</b></span>
       <span class="chip">از باندل ۶ به بعد: <b id="r3">—</b> کارت فعال‌سازی</span>
+      <span class="chip hot" id="gchip1" hidden>گرید A و <bdi dir="ltr">B+</bdi>: ۲۰٪ بیشتر</span>
     </div>
 
     <div class="count">
@@ -327,6 +329,7 @@
       <span class="chip">باندل ۱ تا ۳: <b id="anr1">—</b></span>
       <span class="chip hot">جایزه ۳ باندل: <b id="anr2">—</b></span>
       <span class="chip">باندل ۴ به بعد: <b id="anr3">—</b></span>
+      <span class="chip hot" id="gchip2" hidden>گرید A و <bdi dir="ltr">B+</bdi>: ۲۰٪ بیشتر</span>
     </div>
 
     <div class="total-line"><span>باندل‌های کمپین ویژه مراکز</span><b id="an_of">۰</b></div>
@@ -412,9 +415,9 @@
   // کمپین ویژه مراکز (جذب اعتباری و دائمی)
   var CAMP = {
     firstTier: 5,             // تا این تعداد باندل، نرخ اول
-    first: 100000,            // پاداش نقدی هر باندل از ۱ تا ۵
-    later: 250000,            // پاداش نقدی هر باندل از ششم به بعد
-    cardsPerBundle: 10        // کارت فعال‌سازی به قیمت مصوب، به ازای هر باندل از ششم به بعد
+    cardsPerBundle: 10,       // کارت فعال‌سازی به قیمت مصوب، به ازای هر باندل از ششم به بعد
+    normal: { first: 100000, later: 250000 },   // پاداش نقدی هر باندل (۱ تا ۵ / ششم به بعد)
+    top:    { first: 120000, later: 300000 }    // گرید A و B+ (۲۰٪ بیشتر)
   };
 
   // کمپین انارستان (باندل‌های انارستان زیرمجموعه باندل‌های کمپین ویژه مراکز هستند)
@@ -449,28 +452,33 @@
 
   // ---------- محاسبه و نمایش ----------
   function update() {
-    var top = $('grade').checked;      // فقط روی کمپین انارستان اثر دارد
+    var top = $('grade').checked;      // گرید A و B+ : روی کمپین ویژه مراکز و انارستان اثر دارد
+    var R = top ? CAMP.top : CAMP.normal;
     var b = +$('b').value;
     fill($('b'));
 
+    // نشان گرید
+    $('gchip1').hidden = !top;
+    $('gchip2').hidden = !top;
+
     // نرخ‌ها
-    $('r1').textContent = fmt(CAMP.first) + ' تومان';
-    $('r2').textContent = fmt(CAMP.later) + ' تومان';
+    $('r1').textContent = fmt(R.first) + ' تومان';
+    $('r2').textContent = fmt(R.later) + ' تومان';
     $('r3').textContent = fmt(CAMP.cardsPerBundle);
 
     // کمپین ویژه مراکز
     var firstCnt = Math.min(b, CAMP.firstTier);
     var laterCnt = Math.max(b - CAMP.firstTier, 0);
-    var sumFirst = firstCnt * CAMP.first, sumLater = laterCnt * CAMP.later;
+    var sumFirst = firstCnt * R.first, sumLater = laterCnt * R.later;
     var income1 = sumFirst + sumLater;
     var cards = laterCnt * CAMP.cardsPerBundle;
 
     $('n1').textContent = fmt(b);
     $('s1').textContent = fmt(b * 10) + ' جذب';
     tween($('o1'), income1);
-    $('f1a').textContent = fmt(firstCnt) + ' × ' + fmt(CAMP.first);
+    $('f1a').textContent = fmt(firstCnt) + ' × ' + fmt(R.first);
     $('v1a').textContent = fmt(sumFirst) + ' تومان';
-    $('f1b').textContent = fmt(laterCnt) + ' × ' + fmt(CAMP.later);
+    $('f1b').textContent = fmt(laterCnt) + ' × ' + fmt(R.later);
     $('v1b').textContent = fmt(sumLater) + ' تومان';
     $('f1c').textContent = fmt(laterCnt) + ' × ' + fmt(CAMP.cardsPerBundle);
     $('v1c').textContent = fmt(cards) + ' کارت';
@@ -491,9 +499,9 @@
 
     // کارت جمع مشوق
     $('sa').textContent = fmt(income1) + ' تومان';
-    $('sfA1').textContent = fmt(firstCnt) + ' × ' + fmt(CAMP.first);
+    $('sfA1').textContent = fmt(firstCnt) + ' × ' + fmt(R.first);
     $('svA1').textContent = fmt(sumFirst) + ' تومان';
-    $('sfA2').textContent = fmt(laterCnt) + ' × ' + fmt(CAMP.later);
+    $('sfA2').textContent = fmt(laterCnt) + ' × ' + fmt(R.later);
     $('svA2').textContent = fmt(sumLater) + ' تومان';
     $('sfA3').textContent = fmt(laterCnt) + ' × ' + fmt(CAMP.cardsPerBundle);
     $('svA3').textContent = fmt(cards) + ' کارت';
