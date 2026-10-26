@@ -161,35 +161,14 @@
   .row.off { opacity: .45; }
   .row.plus .v { color: var(--amber); }
 
-  /* مودم */
-  .modems { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 4px 0 18px; }
-  .m {
-    text-align: center; padding: 10px 4px; border-radius: 16px; font-size: .78rem;
-    background: rgba(255,255,255,.08); border: 1px solid var(--stroke); color: var(--muted);
-    transition: all .3s;
-  }
-  .m b { display: block; font-size: 1.15rem; color: #fff; }
-  .m.on { background: linear-gradient(140deg, rgba(95,216,255,.55), rgba(47,123,255,.5)); border-color: #fff; color: #fff; box-shadow: 0 0 22px rgba(95,216,255,.45); }
-
-  .bar { position: relative; height: 12px; border-radius: 99px; background: rgba(255,255,255,.2); margin: 0 4px 30px; }
-  .bar .fill { position: absolute; top: 0; bottom: 0; right: 0; border-radius: 99px; background: linear-gradient(270deg, var(--sky), var(--cyan)); transition: width .3s; }
-  .bar .tick { position: absolute; top: 0; height: 12px; width: 2px; background: rgba(255,255,255,.7); }
-  .bar .tick span { position: absolute; top: 16px; right: 50%; transform: translateX(50%); font-size: .72rem; color: var(--muted); white-space: nowrap; }
-
   .total-line { display: flex; justify-content: space-between; align-items: baseline; font-size: .92rem; color: var(--muted); }
   .total-line b { color: #fff; font-size: 1.1rem; }
-  .modem-out { margin-top: 12px; }
-  .modem-out .big { font-size: 1.9rem; font-weight: 800; line-height: 1.4; }
-  .modem-out .hint { color: var(--cyan); font-size: .9rem; }
-
-  .notes { margin-top: 18px; }
   .note {
     padding: 12px 14px; border-radius: 16px; font-size: .88rem;
     background: rgba(255,255,255,.1); border: 1px solid var(--stroke);
     position: relative; overflow: hidden; padding-inline-start: 20px;
   }
   .note::before { content: ""; position: absolute; top: 0; bottom: 0; right: 0; width: 5px; background: var(--amber); }
-  .note + .note { margin-top: 22px; }
 
   /* جمع مشوق */
   .grp { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; margin-top: 16px; font-weight: 800; font-size: 1rem; }
@@ -255,6 +234,11 @@
   .anar input[type=range]:disabled { opacity: .45; cursor: not-allowed; }
   .anar .step:disabled { opacity: .4; cursor: not-allowed; }
   .anar .count .u { white-space: nowrap; }
+
+  /* کمپین ویژه مراکز */
+  .row.cardr .v { color: var(--cyan); }
+  .chint { margin-top: 12px; font-size: .88rem; color: var(--cyan); }
+  .note.rule { margin-top: 14px; }
 </style>
 </head>
 <body>
@@ -264,14 +248,14 @@
 
   <header>
     <h1>محاسبه‌گر مشوق کمپین دفاتر</h1>
-    <p>هر ۱۰ سیم‌کارت = ۱ باندل. اسلایدرها را جابه‌جا کنید تا مبلغ مشوق دفتر نمایش داده شود.</p>
+    <p>هر ۱۰ جذب = ۱ باندل. اسلایدرها را جابه‌جا کنید تا مبلغ مشوق دفتر نمایش داده شود.</p>
   </header>
 
   <!-- گرید -->
   <section class="glass grade">
     <div>
       <h2>دفتر گرید A یا <bdi dir="ltr">B+</bdi></h2>
-      <p>این دفاتر مشوق بیشتری دریافت می‌کنند</p>
+      <p>مشوق کمپین انارستان برای این دفاتر ۲۰٪ بیشتر است</p>
     </div>
     <label class="switch">
       <input type="checkbox" id="grade" role="switch" aria-label="دفتر گرید A یا B پلاس">
@@ -279,24 +263,25 @@
     </label>
   </section>
 
-  <!-- کمپین اول: باندل -->
+  <!-- کمپین ویژه مراکز: جذب اعتباری و دائمی -->
   <section class="glass">
     <div class="card-head">
       <div>
-        <h2>مشوق فعال‌سازی باندل</h2>
-        <p>از باندل چهارم به بعد، مشوق هر باندل بیشتر می‌شود</p>
+        <h2>کمپین ویژه مراکز</h2>
+        <p>جذب اعتباری و دائمی. هر باندل شامل ۱۰ جذب است</p>
       </div>
       <div class="icon"><svg viewBox="0 0 24 24"><rect x="6" y="2.5" width="12" height="19" rx="3"/><path d="M10 6.5h4M10.5 18h3"/></svg></div>
     </div>
 
     <div class="rates">
-      <span class="chip">باندل ۱ تا ۳: <b id="r1">—</b></span>
-      <span class="chip hot">باندل ۴ به بعد: <b id="r2">—</b></span>
+      <span class="chip">تا ۵ باندل: <b id="r1">—</b></span>
+      <span class="chip hot">از باندل ۶ به بعد: <b id="r2">—</b></span>
+      <span class="chip">از باندل ۶ به بعد: <b id="r3">—</b> کارت فعال‌سازی</span>
     </div>
 
     <div class="count">
       <span class="n" id="n1">۰</span><span class="u">باندل</span>
-      <span class="sub" id="s1">۰ سیم‌کارت</span>
+      <span class="sub" id="s1">۰ جذب</span>
     </div>
     <div class="ctrl">
       <button class="step" data-t="b" data-d="-1" aria-label="کم کردن یک باندل">−</button>
@@ -306,56 +291,26 @@
     <div class="scale" aria-hidden="true"><span style="right:0">۰</span><span style="right:50%">۵۰</span><span style="right:100%">۱۰۰</span></div>
 
     <div class="result">
-      <div class="lbl">مبلغ دریافتی دفتر</div>
+      <div class="lbl">پاداش نقدی دریافتی دفتر</div>
       <div class="amt"><span id="o1">۰</span><small>تومان</small></div>
       <div class="rows">
         <div class="row" id="row1a">
-          <div>باندل ۱ تا ۳<span class="f" id="f1a"></span></div>
+          <div>باندل ۱ تا ۵<span class="f" id="f1a"></span></div>
           <div class="v" id="v1a"></div>
         </div>
         <div class="row plus" id="row1b">
-          <div>باندل ۴ به بعد<span class="f" id="f1b"></span></div>
+          <div>باندل ۶ به بعد<span class="f" id="f1b"></span></div>
           <div class="v" id="v1b"></div>
         </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- کمپین دوم: مشتری جدید -->
-  <section class="glass">
-    <div class="card-head">
-      <div>
-        <h2>مشوق مشترک جدید</h2>
-        <p>چند نفر از باندل بالا مشترکانی هستند که تا امروز همراه اول نداشته‌اند. هر ۱۰ مشترک جدید = ۱ باندل</p>
-      </div>
-      <div class="icon"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.6-3.6 3.2-5.5 6.5-5.5s5.9 1.9 6.5 5.5M18 8v6M15 11h6"/></svg></div>
-    </div>
-
-    <div class="rates">
-      <span class="chip hot">هر باندل: <b id="r3">—</b></span>
-    </div>
-
-    <div class="count">
-      <span class="n" id="n2">۰</span><span class="u">باندل</span>
-      <span class="sub" id="s2">۰ مشترک جدید</span>
-    </div>
-    <div class="ctrl">
-      <button class="step" data-t="nb" data-d="-1" aria-label="کم کردن یک باندل">−</button>
-      <input type="range" id="nb" dir="rtl" min="0" max="100" step="1" value="0" aria-label="تعداد باندل مشتری جدید">
-      <button class="step" data-t="nb" data-d="1" aria-label="اضافه کردن یک باندل">+</button>
-    </div>
-    <div class="scale" aria-hidden="true"><span style="right:0">۰</span><span style="right:50%">۵۰</span><span style="right:100%">۱۰۰</span></div>
-
-    <div class="result">
-      <div class="lbl">مبلغ دریافتی دفتر</div>
-      <div class="amt"><span id="o2">۰</span><small>تومان</small></div>
-      <div class="rows">
-        <div class="row">
-          <div>مشتری جدید<span class="f" id="f2"></span></div>
-          <div class="v" id="v2"></div>
+        <div class="row cardr" id="row1c">
+          <div>کارت فعال‌سازی به قیمت مصوب<span class="f" id="f1c"></span></div>
+          <div class="v" id="v1c"></div>
         </div>
       </div>
+      <div class="chint" id="chint"></div>
     </div>
+
+    <div class="note rule">هر ۱۰ جذب = ۱ باندل. باندل ناقص حساب نمی‌شود؛ مثلاً ۴۵ جذب = ۴ باندل.</div>
   </section>
 
   <!-- کمپین انارستان -->
@@ -363,7 +318,7 @@
     <div class="card-head">
       <div>
         <h2>کمپین انارستان</h2>
-        <p>از بین باندل‌های فعال‌سازی بالا، چند باندل مربوط به انارستان بوده؟</p>
+        <p>از بین باندل‌های کمپین ویژه مراکز، چند باندل مربوط به انارستان بوده؟</p>
       </div>
       <div class="icon"><svg viewBox="0 0 24 24"><path d="M12 7.5c-4.2 0-7 2.9-7 6.4 0 3.6 3 6.1 7 6.1s7-2.5 7-6.1c0-3.5-2.8-6.4-7-6.4z"/><path d="M9 7.5 8 4l2.2 1.6L12 3.5l1.8 2.1L16 4l-1 3.5"/><path d="M9.5 13.5c.4 1.6 1.4 2.5 2.5 2.5"/></svg></div>
     </div>
@@ -374,7 +329,7 @@
       <span class="chip">باندل ۴ به بعد: <b id="anr3">—</b></span>
     </div>
 
-    <div class="total-line"><span>باندل‌های فعال‌سازی ثبت‌شده</span><b id="an_of">۰</b></div>
+    <div class="total-line"><span>باندل‌های کمپین ویژه مراکز</span><b id="an_of">۰</b></div>
 
     <div class="count">
       <span class="n" id="an_n">۰</span><span class="u">باندل انارستان</span>
@@ -408,43 +363,6 @@
     </div>
   </section>
 
-  <!-- مودم -->
-  <section class="glass">
-    <div class="card-head">
-      <div>
-        <h2>محاسبه مودم</h2>
-        <p>بر اساس جمع باندل‌های ماه</p>
-      </div>
-      <div class="icon"><svg viewBox="0 0 24 24"><rect x="3" y="13" width="18" height="7" rx="2.5"/><path d="M7 16.5h.01M11 16.5h.01M8 9.5a6 6 0 0 1 8 0M5.5 6.5a10 10 0 0 1 13 0"/></svg></div>
-    </div>
-
-    <div class="modems">
-      <div class="m" id="m1"><b>۲۵</b>باندل<br>۱ مودم</div>
-      <div class="m" id="m2"><b>۴۰</b>باندل<br>۲ مودم</div>
-      <div class="m" id="m3"><b>۶۰</b>باندل<br>۳ مودم</div>
-    </div>
-
-    <div class="bar" aria-hidden="true">
-      <div class="fill" id="fill"></div>
-      <div class="tick" style="right:41.66%"><span>۲۵</span></div>
-      <div class="tick" style="right:66.66%"><span>۴۰</span></div>
-      <div class="tick" style="right:calc(100% - 2px)"><span>۶۰</span></div>
-    </div>
-
-    <div class="total-line"><span>تعداد باندل محاسبه شده</span><b id="tot">۰</b></div>
-
-    <div class="result modem-out">
-      <div class="lbl">مودم دریافتی </div>
-      <div class="big"><span id="mo">۰</span> <small style="font-size:.95rem;font-weight:500;color:var(--muted)">مودم</small></div>
-      <div class="hint" id="hint"></div>
-    </div>
-
-    <div class="notes">
-      <div class="note">این مودم، مشوق کاربر دفتر می‌باشد.</div>
-      <div class="note">مشوق های کاربران (مودم) به ازای جذب های اتفاق افتاده در هر ماژول به صورت جداگانه محاسبه میشود - ماژول اول = 250 ماژول دوم= 200 فقط یک مودم به ماژول اول هدیه داده میشود.</div>
-    </div>
-  </section>
-
   <!-- جمع مشوق -->
   <section class="glass" id="summary">
     <div class="card-head">
@@ -455,15 +373,11 @@
       <div class="icon"><svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="3"/><path d="M8 8h8M8 12h3M13 12h3M8 16h3M13 16h3"/></svg></div>
     </div>
 
-    <div class="grp"><span>مشوق فعال‌سازی باندل</span><span class="g" id="sa">۰</span></div>
+    <div class="grp"><span>کمپین ویژه مراکز</span><span class="g" id="sa">۰</span></div>
     <div class="rows">
-      <div class="row" id="srowA1"><div>باندل ۱ تا ۳<span class="f" id="sfA1"></span></div><div class="v" id="svA1"></div></div>
-      <div class="row plus" id="srowA2"><div>باندل ۴ به بعد<span class="f" id="sfA2"></span></div><div class="v" id="svA2"></div></div>
-    </div>
-
-    <div class="grp sep"><span>مشوق مشتری جدید</span><span class="g" id="sb">۰</span></div>
-    <div class="rows">
-      <div class="row" id="srowB"><div>باندل مشتری جدید<span class="f" id="sfB"></span></div><div class="v" id="svB"></div></div>
+      <div class="row" id="srowA1"><div>باندل ۱ تا ۵<span class="f" id="sfA1"></span></div><div class="v" id="svA1"></div></div>
+      <div class="row plus" id="srowA2"><div>باندل ۶ به بعد<span class="f" id="sfA2"></span></div><div class="v" id="svA2"></div></div>
+      <div class="row cardr" id="srowA3"><div>کارت فعال‌سازی به قیمت مصوب<span class="f" id="sfA3"></span></div><div class="v" id="svA3"></div></div>
     </div>
 
     <div class="grp sep"><span>کمپین انارستان</span><span class="g" id="san">۰</span></div>
@@ -476,7 +390,7 @@
     <div class="result sum-total">
       <div class="line"><span class="lbl">جمع کل مشوق نقدی</span></div>
       <div class="big"><span id="stotal">۰</span><small>تومان</small></div>
-      <div class="line"><span class="lbl">مودم دریافتی</span><b id="smodem">۰ مودم</b></div>
+      <div class="line"><span class="lbl">کارت فعال‌سازی (به قیمت مصوب)</span><b id="scards">۰ کارت</b></div>
     </div>
   </section>
 
@@ -489,23 +403,21 @@
     <div class="l">جمع مشوق نقدی دفتر</div>
     <div class="a"><span id="grand">۰</span><small>تومان</small></div>
   </div>
-  <div class="md"><b id="dm">۰</b><span>مودم</span></div>
+  <div class="md"><b id="dcards">۰</b><span>کارت</span></div>
 </div>
 
 <script>
 (function () {
   // ---------- تنظیمات کمپین ----------
-  var RATES = {
-    normal: { first: 100000, later: 250000, newUser: 1000000 },
-    top:    { first: 120000, later: 270000, newUser: 1200000 }   // گرید A و B+
+  // کمپین ویژه مراکز (جذب اعتباری و دائمی)
+  var CAMP = {
+    firstTier: 5,             // تا این تعداد باندل، نرخ اول
+    first: 100000,            // پاداش نقدی هر باندل از ۱ تا ۵
+    later: 250000,            // پاداش نقدی هر باندل از ششم به بعد
+    cardsPerBundle: 10        // کارت فعال‌سازی به قیمت مصوب، به ازای هر باندل از ششم به بعد
   };
-  var FIRST_TIER_BUNDLES = 3;                       // سه باندل اول
-  var MODEM_TIERS = [[60, 3], [40, 2], [25, 1]];    // [حداقل باندل، تعداد مودم]
-  var MODEM_MAX_SCALE = 60;
-  // جمع باندل‌های مودم = باندل فعال‌سازی + باندل مشتری جدید
-  var MODEM_COUNTS_BOTH = false;
 
-  // کمپین انارستان (باندل‌های انارستان زیرمجموعه باندل‌های فعال‌سازی هستند)
+  // کمپین انارستان (باندل‌های انارستان زیرمجموعه باندل‌های کمپین ویژه مراکز هستند)
   var ANAR = {
     target: 3,                                                   // با رسیدن به این تعداد باندل، جایزه داده می‌شود
     normal: { first: 300000, bonus: 300000, later: 350000 },
@@ -537,83 +449,59 @@
 
   // ---------- محاسبه و نمایش ----------
   function update() {
-    var top = $('grade').checked;
-    var r = top ? RATES.top : RATES.normal;
-    var b = +$('b').value, nb = +$('nb').value;
-    fill($('b')); fill($('nb'));
+    var top = $('grade').checked;      // فقط روی کمپین انارستان اثر دارد
+    var b = +$('b').value;
+    fill($('b'));
 
     // نرخ‌ها
-    $('r1').textContent = fmt(r.first) + ' تومان';
-    $('r2').textContent = fmt(r.later) + ' تومان';
-    $('r3').textContent = fmt(r.newUser) + ' تومان';
+    $('r1').textContent = fmt(CAMP.first) + ' تومان';
+    $('r2').textContent = fmt(CAMP.later) + ' تومان';
+    $('r3').textContent = fmt(CAMP.cardsPerBundle);
 
-    // کمپین اول
-    var firstCnt = Math.min(b, FIRST_TIER_BUNDLES);
-    var laterCnt = Math.max(b - FIRST_TIER_BUNDLES, 0);
-    var sumFirst = firstCnt * r.first, sumLater = laterCnt * r.later;
+    // کمپین ویژه مراکز
+    var firstCnt = Math.min(b, CAMP.firstTier);
+    var laterCnt = Math.max(b - CAMP.firstTier, 0);
+    var sumFirst = firstCnt * CAMP.first, sumLater = laterCnt * CAMP.later;
     var income1 = sumFirst + sumLater;
+    var cards = laterCnt * CAMP.cardsPerBundle;
 
     $('n1').textContent = fmt(b);
-    $('s1').textContent = fmt(b * 10) + ' سیم‌کارت';
+    $('s1').textContent = fmt(b * 10) + ' جذب';
     tween($('o1'), income1);
-    $('f1a').textContent = fmt(firstCnt) + ' × ' + fmt(r.first);
+    $('f1a').textContent = fmt(firstCnt) + ' × ' + fmt(CAMP.first);
     $('v1a').textContent = fmt(sumFirst) + ' تومان';
-    $('f1b').textContent = fmt(laterCnt) + ' × ' + fmt(r.later);
+    $('f1b').textContent = fmt(laterCnt) + ' × ' + fmt(CAMP.later);
     $('v1b').textContent = fmt(sumLater) + ' تومان';
+    $('f1c').textContent = fmt(laterCnt) + ' × ' + fmt(CAMP.cardsPerBundle);
+    $('v1c').textContent = fmt(cards) + ' کارت';
     $('row1a').classList.toggle('off', firstCnt === 0);
     $('row1b').classList.toggle('off', laterCnt === 0);
-
-    // کمپین دوم
-    var income2 = nb * r.newUser;
-    $('n2').textContent = fmt(nb);
-    $('s2').textContent = fmt(nb * 10) + ' مشترک جدید';
-    tween($('o2'), income2);
-    $('f2').textContent = fmt(nb) + ' × ' + fmt(r.newUser);
-    $('v2').textContent = fmt(income2) + ' تومان';
-
-    // مودم
-    var total = MODEM_COUNTS_BOTH ? b + nb : b;
-    var modems = 0;
-    for (var i = 0; i < MODEM_TIERS.length; i++) {
-      if (total >= MODEM_TIERS[i][0]) { modems = MODEM_TIERS[i][1]; break; }
-    }
-    $('tot').textContent = fmt(total);
-    $('mo').textContent = fmt(modems);
-    $('m1').classList.toggle('on', modems >= 1);
-    $('m2').classList.toggle('on', modems >= 2);
-    $('m3').classList.toggle('on', modems >= 3);
-    $('fill').style.width = Math.min(total / MODEM_MAX_SCALE, 1) * 100 + '%';
-
-    var hint;
-    if (modems >= 3) {
-      hint = 'به بالاترین سطح مودم رسیده است.';
-    } else {
-      var next = modems === 0 ? 25 : modems === 1 ? 40 : 60;
-      hint = fmt(next - total) + ' باندل دیگر تا مودم ' + (modems === 0 ? 'اول' : modems === 1 ? 'دوم' : 'سوم') + ' باقی مانده است.';
-    }
-    $('hint').textContent = hint;
+    $('row1c').classList.toggle('off', laterCnt === 0);
+    $('chint').textContent = laterCnt === 0
+      ? 'تا ' + fmt(CAMP.firstTier) + ' باندل، کارت فعال‌سازی تعلق نمی‌گیرد.'
+      : fmt(cards) + ' کارت فعال‌سازی به قیمت مصوب تعلق می‌گیرد.';
 
     // کمپین انارستان
     var anarTotal = updateAnar(top);
 
     // جمع کل
-    tween($('grand'), income1 + income2 + anarTotal);
-    $('dm').textContent = fmt(modems);
+    var grand = income1 + anarTotal;
+    tween($('grand'), grand);
+    $('dcards').textContent = fmt(cards);
 
     // کارت جمع مشوق
     $('sa').textContent = fmt(income1) + ' تومان';
-    $('sfA1').textContent = fmt(firstCnt) + ' × ' + fmt(r.first);
+    $('sfA1').textContent = fmt(firstCnt) + ' × ' + fmt(CAMP.first);
     $('svA1').textContent = fmt(sumFirst) + ' تومان';
-    $('sfA2').textContent = fmt(laterCnt) + ' × ' + fmt(r.later);
+    $('sfA2').textContent = fmt(laterCnt) + ' × ' + fmt(CAMP.later);
     $('svA2').textContent = fmt(sumLater) + ' تومان';
+    $('sfA3').textContent = fmt(laterCnt) + ' × ' + fmt(CAMP.cardsPerBundle);
+    $('svA3').textContent = fmt(cards) + ' کارت';
     $('srowA1').classList.toggle('off', firstCnt === 0);
     $('srowA2').classList.toggle('off', laterCnt === 0);
-    $('sb').textContent = fmt(income2) + ' تومان';
-    $('sfB').textContent = fmt(nb) + ' × ' + fmt(r.newUser);
-    $('svB').textContent = fmt(income2) + ' تومان';
-    $('srowB').classList.toggle('off', nb === 0);
-    tween($('stotal'), income1 + income2 + anarTotal);
-    $('smodem').textContent = fmt(modems) + ' مودم';
+    $('srowA3').classList.toggle('off', laterCnt === 0);
+    tween($('stotal'), grand);
+    $('scards').textContent = fmt(cards) + ' کارت';
   }
 
   // ---------- کمپین انارستان ----------
@@ -622,7 +510,7 @@
     var b = +$('b').value;
     var an = $('an');
 
-    // باندل‌های انارستان نمی‌توانند از باندل‌های فعال‌سازی بیشتر باشند
+    // باندل‌های انارستان نمی‌توانند از باندل‌های کمپین ویژه مراکز بیشتر باشند
     an.max = b;
     if (+an.value > b) an.value = b;
     var n = +an.value;
@@ -663,9 +551,9 @@
     $('an_row3').classList.toggle('off', laterCnt === 0);
 
     var hint;
-    if (none) hint = 'ابتدا تعداد باندل فعال‌سازی را در بخش بالا وارد کنید.';
+    if (none) hint = 'ابتدا تعداد باندل کمپین ویژه مراکز را در بخش بالا وارد کنید.';
     else if (reached) hint = 'جایزه ' + fmt(R.bonus) + ' تومانی فعال شد.';
-    else if (b < ANAR.target) hint = 'برای جایزه، باندل فعال‌سازی باید حداقل ' + fmt(ANAR.target) + ' باشد.';
+    else if (b < ANAR.target) hint = 'برای جایزه، باندل‌های کمپین ویژه مراکز باید حداقل ' + fmt(ANAR.target) + ' باشد.';
     else hint = fmt(ANAR.target - n) + ' باندل دیگر تا جایزه ' + fmt(R.bonus) + ' تومانی مانده است.';
     $('an_hint').textContent = hint;
 
@@ -686,7 +574,6 @@
 
   // ---------- رویدادها ----------
   $('b').addEventListener('input', update);
-  $('nb').addEventListener('input', update);
   $('an').addEventListener('input', update);
   $('grade').addEventListener('change', update);
 
